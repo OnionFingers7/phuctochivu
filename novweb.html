@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phục Tô Chi Vũ</title>
+    <link rel="icon" type="image/png" href="logo.PNG">
+</head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phục Tô Chi Vũ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            background-color: #f5deb3; /* màu cát (Sandy) */
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #005f80; /* màu xanh đậm giống nền trên cùng */
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            font-family: "Times New Roman", serif; /* Changed font to Times New Roman */
+            font-size: 35px; /* Increased font size */
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .container {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+        h2 {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: left; /* Align text to the left */
+            margin-bottom: 5px;
+        }
+        .chapter-info {
+            text-align: left; /* Align text to the left */
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+        #toggle-chapter-list {
+            background-color: white;
+            color: #005f80;
+            padding: 10px;
+            border: 1px solid #005f80;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+            width: 100%;
+            text-align: center;
+        }
+        #chapter-list {
+            display: none;
+            max-height: 150px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #e0f7fa;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            margin: 5px 0;
+            padding: 3px;
+            font-size: 14px;
+        }
+        ul li a {
+            text-decoration: none;
+            color: #005f80;
+        }
+        ul li:hover {
+            background-color: #b2ebf2;
+        }
+        #comment-section h2 {
+            padding: 10px 0;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+        }
+        #comment-section {
+            margin-top: 40px;
+        }
+        #new-comment, #username {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+        }
+        #post-comment {
+            margin-top: 10px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #005f80;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .comment {
+            background-color: #ffecb3;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+            position: relative;
+        }
+        .comment-author {
+            font-weight: bold;
+        }
+        .comment button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: transparent;
+            border: none;
+            color: #333;
+            padding: 0;
+            font-size: 14px;
+            cursor: pointer;
+            display: none; /* Ẩn nút xóa cho đến khi admin đăng nhập */
+        }
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .controls button,
+        .controls select {
+            margin: 5px;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            border-radius: 5px;
+        }
+        #font-size-control button {
+            padding: 5px 10px;
+            margin: 0 5px;
+        }
+        #background-color-control button {
+            padding: 5px 10px;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <header onclick="adminLoginClick()">
+        Phục Tô Chi Vũ
+    </header>
+
+    <div class="container">
+        <h2 id="chapter-title">Chương 1: Khởi Đầu</h2>
+        <div class="chapter-info">
+            <p>Tác giả: Dương Thông Vị Thủ Chỉ</p>
+            <p>Số từ: 1000</p>
+        </div>
+        <p id="chapter-content">
+            Nội dung chương 1...
+        </p>
+
+        <!-- Nút bấm mục lục chương -->
+        <button id="toggle-chapter-list" onclick="toggleChapterList()">Mục Lục</button>
+        <div id="chapter-list">
+            <ul>
+                <li><a href="#" onclick="loadChapter(1)">Chương 1: Khởi Đầu</a></li>
+                <li><a href="#" onclick="loadChapter(2)">Chương 2: Cuộc Gặp Gỡ</a></li>
+                <li><a href="#" onclick="loadChapter(3)">Chương 3: Bí Mật Được Giải Mã</a></li>
+            </ul>
+        </div>
+
+        <div class="controls">
+            <label for="font-family">Phông chữ:</label>
+            <select id="font-family" onchange="changeFontFamily(this.value)">
+                <option value="Arial">Arial</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Courier New">Courier New</option>
+            </select>
+
+            <!-- Thêm chức năng đổi cỡ chữ -->
+            <div id="font-size-control">
+                <label>Cỡ chữ:</label>
+                <button onclick="changeFontSize('small')">Nhỏ</button>
+                <button onclick="changeFontSize('medium')">Vừa</button>
+                <button onclick="changeFontSize('large')">Lớn</button>
+            </div>
+
+            <!-- Thêm chức năng đổi màu phông nền -->
+            <div id="background-color-control">
+                <label>Màu nền:</label>
+                <button onclick="changeBackgroundColor('sandy')">Sandy</button>
+                <button onclick="changeBackgroundColor('light')">Sáng</button>
+                <button onclick="changeBackgroundColor('dark')">Tối</button>
+            </div>
+        </div>
+
+        <div id="comment-section">
+            <h2>---Bình Luận---</h2>
+            <!-- Form để đăng bình luận mới -->
+            <input type="text" id="username" placeholder="Tên của bạn...">
+            <textarea id="new-comment" placeholder="Nhập bình luận của bạn ở đây..."></textarea>
+            <button id="post-comment" onclick="postComment()">Đăng bình luận</button>
+        </div>
+    </div>
+
+    <script>
+        let currentChapter = 1;
+        let adminLoggedIn = false;
+        let clickCount = 0;
+        const chapters = [
+            {
+                title: "Chương 1: Khởi Đầu",
+                content: "Nội dung chương 1..."
+            },
+            {
+                title: "Chương 2: Cuộc Gặp Gỡ",
+                content: "Nội dung chương 2..."
+            },
+            {
+                title: "Chương 3: Bí Mật Được Giải Mã",
+                content: "Nội dung chương 3..."
+            }
+        ];
+
+        function previousChapter() {
+            if (currentChapter > 1) {
+                currentChapter--;
+                loadChapter(currentChapter);
+            }
+        }
+
+        function nextChapter() {
+            if (currentChapter < chapters.length) {
+                currentChapter++;
+                loadChapter(currentChapter);
+            }
+        }
+
+        function loadChapter(chapterNumber) {
+            const chapter = chapters[chapterNumber - 1];
+            document.getElementById('chapter-title').textContent = chapter.title;
+            document.getElementById('chapter-content').textContent = chapter.content;
+        }
+
+        function postComment() {
+            const commentSection = document.getElementById('comment-section');
+            const newCommentText = document.getElementById('new-comment').value;
+            const username = document.getElementById('username').value || "Ẩn danh";
+            if (newCommentText.trim() === "") {
+                alert("Vui lòng nhập nội dung bình luận.");
+                return;
+            }
+
+            const commentDiv = document.createElement('div');
+            commentDiv.classList.add('comment');
+            commentDiv.innerHTML = `<span class="comment-author">${username}:</span> ${newCommentText}`;
+            commentSection.appendChild(commentDiv);
+
+            document.getElementById('new-comment').value = '';
+            document.getElementById('username').value = '';
+        }
+
+        function toggleChapterList() {
+            const chapterList = document.getElementById('chapter-list');
+            if (chapterList.style.display === "none") {
+                chapterList.style.display = "block";
+            } else {
+                chapterList.style.display = "none";
+            }
+        }
+
+        function adminLoginClick() {
+            clickCount++;
+            if (clickCount >= 5) {
+                alert("Đăng nhập admin!");
+                adminLoggedIn = true;
+                const deleteButtons = document.querySelectorAll('.comment button');
+                deleteButtons.forEach(button => {
+                    button.style.display = 'block';
+                });
+            }
+        }
+
+        function changeFontFamily(fontFamily) {
+            document.body.style.fontFamily = fontFamily;
+        }
+
+        function changeFontSize(size) {
+            const body = document.body;
+            if (size === 'small') {
+                body.style.fontSize = '14px';
+            } else if (size === 'medium') {
+                body.style.fontSize = '16px';
+            } else if (size === 'large') {
+                body.style.fontSize = '20px';
+            }
+        }
+
+        function changeBackgroundColor(color) {
+            if (color === 'sandy') {
+                document.body.style.backgroundColor = '#f5deb3';
+            } else if (color === 'light') {
+                document.body.style.backgroundColor = '#ffffff';
+            } else if (color === 'dark') {
+                document.body.style.backgroundColor = '#333';
+                document.body.style.color = '#fff';
+            }
+        }
+    </script>
+</body>
+</html>
